@@ -13,9 +13,6 @@ app.use(express.json());
 
 // This tells Express to use your auth routes for any URL starting with /api/auth
 app.use('/api/auth', require('./routes/auth'));
-
-// Define Routes
-app.use('/api/auth', require('./routes/auth'));
 app.use('/api/logs', require('./routes/logs')); 
 
 // Database connection
