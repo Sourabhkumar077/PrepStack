@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { AuthContext } from '../contexts/AuthContext.jsx';
 
 const AuthForm = () => {
   const [name, setName] = useState('');
@@ -7,15 +9,18 @@ const AuthForm = () => {
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
 
+  const navigate = useNavigate(); // Hook for navigation
+  const { login } = useContext(AuthContext); // Get login
+
   const handleSubmit = async () => {
     if (!isLogin) {
       // --- Register Logic (Already working) ---
       try {
-        const res = await axios.post('/api/auth/register', { name, email, password });
-        console.log('Registration successful! Token:', res.data.token);
-        alert('Registration successful!');
+        const res = await axios.post('/api/auth/login', { email, password });
+        login(res.data.token); // Use context's login function
+        navigate('/dashboard'); // Navigate to dashboard after login
       } catch (err) {
-        console.error('Registration error:', err.response.data);
+        console.error('Login error:', err.response.data);
         alert('Error: ' + err.response.data.msg);
       }
     } else {
@@ -24,9 +29,9 @@ const AuthForm = () => {
         return alert('Please fill email and password');
       }
       try {
-        const res = await axios.post('/api/auth/login', { email, password });
-        console.log('Login successful! Token:', res.data.token);
-        alert('Login successful!');
+        const res = await axios.post('/api/auth/register', { name, email, password });
+        login(res.data.token); // Use context's login function
+        navigate('/dashboard'); // Navigate to dashboard after register
       } catch (err) {
         console.error('Login error:', err.response.data);
         alert('Error: ' + err.response.data.msg);
@@ -69,8 +74,8 @@ const AuthForm = () => {
         className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <div className="flex justify-around mt-2">
-        <button 
-          onClick={handleSubmit} 
+        <button
+          onClick={handleSubmit}
           className="w-full px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
         >
           {isLogin ? 'Login' : 'Register'}

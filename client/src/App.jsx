@@ -1,19 +1,24 @@
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
-
-import './App.css'
+import DashboardPage from './pages/DashboardPage'; // Import DashboardPage
+import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRoute
 
 function App() {
-
   return (
-    <>
-      <Routes>
+    <Routes>
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/login" element={<LoginPage />} />
-      {/* We'll add a /register route that also uses LoginPage or a new page */}
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        } 
+      />
     </Routes>
-    </>
-  )
+  );
 }
 
-export default App
+export default App;
