@@ -1,15 +1,15 @@
-import { Router } from 'express';
-const router = Router();
-import { register, login } from '../controllers/authController'; // login ko import karein
+const express = require('express');
+const router = express.Router();
+const { register, login } = require('../controllers/authController');
 
 // @route   POST api/auth/register
-[cite_start]// @desc    Register a new user [cite: 106]
+// @desc    Register a new user
 // @access  Public
 router.post('/register', register);
 
 // @route   POST api/auth/login
-[cite_start]// @desc    Authenticate user & get token [cite: 125]
+// @desc    Authenticate user & get token
 // @access  Public
-router.post('/login', login); // Naya route add karein
+router.post('/login', login);
 
-export default router;
+module.exports = router;

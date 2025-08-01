@@ -8,6 +8,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// This middleware is needed to parse JSON bodies from requests
+app.use(express.json());
+
+// This tells Express to use your auth routes for any URL starting with /api/auth
+app.use('/api/auth', require('./routes/auth'));
+
 // Database connection
 const connectDB = async () => {
   try {
