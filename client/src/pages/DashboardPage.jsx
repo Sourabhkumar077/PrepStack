@@ -3,20 +3,18 @@ import { AuthContext } from '../contexts/AuthContext';
 import axios from 'axios'; // We will replace this with a custom 'api' utility
 import LogForm from '../components/LogForm';
 import LogList from '../components/LogList';
+import api from '../utils/api'; 
 
 const DashboardPage = () => {
   const { logout, token } = useContext(AuthContext);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
+
   const fetchLogs = async () => {
     try {
-      const config = {
-        headers: {
-          'x-auth-token': token,
-        },
-      };
-      const res = await axios.get('/api/logs', config);
+      // No need to pass headers manually anymore!
+      const res = await api.get('/logs'); 
       setLogs(res.data);
     } catch (err) {
       console.error('Error fetching logs:', err);
