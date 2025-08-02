@@ -15,6 +15,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/logs', require('./routes/logs')); 
 app.use('/api/goals', require('./routes/goals'));
+app.use('/api/checklists', require('./routes/checklists'));
 
 // Database connection
 const connectDB = async () => {
