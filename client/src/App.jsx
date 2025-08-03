@@ -1,26 +1,36 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+
+// Import pages directly
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import GoalsPage from './pages/GoalPage'; // 
+import GoalsPage from './pages/GoalPage'; // FIX 1: Corrected filename from 'GoalPage'
+import ChecklistsPage from './pages/ChecklistsPage';
 
-import { ProtectedRoute, Layout } from './components/index';
+// Import components directly
+import ProtectedRoute from './components/ProtectedRoute'; // FIX 2: Direct imports
+import Layout from './components/Layout';
 
 function App() {
   return (
     <Routes>
+      {/* Public Route */}
       <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/"
+
+      {/* Parent Protected Route with Layout */}
+      <Route 
+        path="/" 
         element={
           <ProtectedRoute>
             <Layout />
           </ProtectedRoute>
         }
       >
-        <Route path="/" element={<Navigate to="/dashboard" />} />
+        {/* Child Protected Routes */}
+        <Route index element={<Navigate to="/dashboard" />} /> {/* FIX 3: Use 'index' for default route */}
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="goals" element={<GoalsPage />} />
+        <Route path="checklists" element={<ChecklistsPage />} />
       </Route>
     </Routes>
   );

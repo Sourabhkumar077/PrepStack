@@ -13,6 +13,8 @@ const Navbar = () => {
             <div className="flex gap-8">
                 <NavLink to="/dashboard" style={({ isActive }) => isActive ? activeLinkStyles : undefined} className={linkStyles}>Dashboard</NavLink>
                 <NavLink to="/goals" style={({ isActive }) => isActive ? activeLinkStyles : undefined} className={linkStyles}>Goals</NavLink>
+                <NavLink to="/checklists" style={({ isActive }) => isActive ? activeLinkStyles : undefined} className={linkStyles}>Checklists</NavLink>
+
             </div>
             <button onClick={logout} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
                 Logout
