@@ -14,7 +14,6 @@ const GoalTracker = ({ goal, onGoalUpdated }) => {
       setNewTopic('');
       onGoalUpdated();
     } catch (err) {
-      console.error('Failed to update goal', err);
       alert('Failed to add topic.');
     }
   };
@@ -28,78 +27,76 @@ const GoalTracker = ({ goal, onGoalUpdated }) => {
       setNewResource('');
       onGoalUpdated();
     } catch (err) {
-      console.error('Failed to update goal', err);
       alert('Failed to add resource.');
     }
   };
 
   const isUrl = (string) => {
-    try {
-      new URL(string);
-      return true;
-    } catch (_) {
-      return false;
-    }
+    try { new URL(string); return true; } catch (_) { return false; }
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md flex flex-col">
-      <h4 className="text-xl font-bold text-gray-800">{goal.subject}</h4>
-      <p className="text-gray-600 my-2">
-        Progress: {goal.completedTopics.length} / {goal.totalTopics > 0 ? goal.totalTopics : 'N/A'} topics completed
-      </p>
+    <div className="card bg-base-100 shadow-xl">
+      <div className="card-body">
+        <h2 className="card-title">{goal.subject}</h2>
+        <p>Progress: {goal.completedTopics.length} topics completed</p>
 
-      {/* Completed Topics Section */}
-      <div className="mt-4">
-        <h5 className="font-semibold mb-2">Completed Topics:</h5>
-        {goal.completedTopics.length > 0 ? (
-          <ul className="list-disc list-inside space-y-1">
-            {goal.completedTopics.map((topic, index) => <li key={index}>{topic}</li>)}
-          </ul>
-        ) : (
-          <p className="text-sm text-gray-500">No topics marked as complete yet.</p>
-        )}
-      </div>
-      <form onSubmit={handleAddTopic} className="flex gap-2 mt-4">
-        <input 
-          type="text"
-          placeholder="Add new completed topic"
-          value={newTopic}
-          onChange={(e) => setNewTopic(e.target.value)}
-          className="flex-grow p-2 border rounded"
-        />
-        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add</button>
-      </form>
+        {/* Completed Topics Section */}
+        <div className="mt-4">
+          <h3 className="font-semibold mb-2">Completed Topics:</h3>
+          {goal.completedTopics.length > 0 ? (
+            <ul className="list-disc list-inside space-y-2 text-sm">
+              {goal.completedTopics.map((topic, index) => <li key={index}>{topic}</li>)}
+            </ul>
+          ) : (
+            <p className="text-sm text-base-content/70">No topics marked as complete yet.</p>
+          )}
+          <form onSubmit={handleAddTopic} className="form-control mt-4">
+            <div className="join">
+              <input 
+                type="text"
+                placeholder="Add new topic..."
+                value={newTopic}
+                onChange={(e) => setNewTopic(e.target.value)}
+                className="input input-bordered join-item w-full"
+              />
+              <button type="submit" className="btn btn-primary join-item">Add</button>
+            </div>
+          </form>
+        </div>
 
-      {/* --- THIS IS THE MISSING SECTION --- */}
-      <div className="mt-6 border-t pt-4">
-        <h5 className="font-semibold mb-2">Saved Resources:</h5>
-        {goal.resources.length > 0 ? (
-          <ul className="space-y-2">
-            {goal.resources.map((resource, index) => (
-              <li key={index} className="text-sm">
-                {isUrl(resource) ? (
-                  <a href={resource} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{resource}</a>
-                ) : (
-                  <p>{resource}</p>
-                )}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-sm text-gray-500">No resources saved yet.</p>
-        )}
+        {/* Resources Section */}
+        <div className="mt-6 border-t border-base-300 pt-4">
+          <h3 className="font-semibold mb-2">Saved Resources:</h3>
+          {goal.resources.length > 0 ? (
+            <ul className="space-y-2 text-sm">
+              {goal.resources.map((resource, index) => (
+                <li key={index}>
+                  {isUrl(resource) ? (
+                    <a href={resource} target="_blank" rel="noopener noreferrer" className="link link-primary break-all">{resource}</a>
+                  ) : (
+                    <p>{resource}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-base-content/70">No resources saved yet.</p>
+          )}
+          <form onSubmit={handleAddResource} className="form-control mt-4">
+             <div className="join">
+                <input 
+                  type="text"
+                  placeholder="Add a link or note..."
+                  value={newResource}
+                  onChange={(e) => setNewResource(e.target.value)}
+                  className="input input-bordered join-item w-full"
+                />
+                <button type="submit" className="btn join-item">Save</button>
+            </div>
+          </form>
+        </div>
       </div>
-      <form onSubmit={handleAddResource} className="flex gap-2 mt-4">
-        <input 
-          type="text"
-          placeholder="Add a link or note"
-          value={newResource}
-          onChange={(e) => setNewResource(e.target.value)}
-          className="flex-grow p-2 border rounded"
-        />
-        <button type="submit" className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">Save</button>
-      </form>
     </div>
   );
 };
