@@ -27,7 +27,7 @@ function App() {
         }
       >
         {/* Child Protected Routes */}
-        <Route index element={<Navigate to="/dashboard" />} /> {/* FIX 3: Use 'index' for default route */}
+        <Route index element={<Navigate to="/app/dashboard" />} /> {/* FIX 3: Use 'index' for default route */}
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="goals" element={<GoalsPage />} />
         <Route path="checklists" element={<ChecklistsPage />} />

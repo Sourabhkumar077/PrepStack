@@ -82,3 +82,15 @@ exports.login = async (req, res) => {
     }
 };
 
+
+// @desc    Get the logged-in user's data
+exports.getMe = async (req, res) => {
+  try {
+    // req.user.id is attached by our auth middleware
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};
