@@ -1,2 +1,109 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* --- Custom styles for React Calendar --- */
+
+/* Main container */
+.react-calendar {
+  width: 100% !important;
+  border: none !important;
+  background-color: transparent !important;
+  font-family: inherit;
+}
+
+/* Calendar Navigation (Arrows and Month/Year) */
+.react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  margin-bottom: 1em;
+}
+
+.react-calendar__navigation button {
+  font-size: 1.25em;
+  font-weight: bold;
+  background: none;
+  border: none;
+  color: #9ca3af; /* gray-400 */
+  transition: background-color 0.2s;
+  border-radius: 6px;
+  padding: 4px 12px;
+}
+
+.react-calendar__navigation button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #e5e7eb; /* gray-200 */
+}
+
+.react-calendar__navigation__label {
+  flex-grow: 0 !important;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: white;
+}
+
+/* Day of the week labels (Mon, Tue, etc.) */
+.react-calendar__month-view__weekdays__weekday {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8em;
+  color: #6b7280; /* gray-500 */
+  text-transform: uppercase;
+  padding-bottom: 0.75em;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+/* Individual date tiles */
+.react-calendar__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: #d1d5db; /* gray-300 */
+  transition: background-color 0.2s;
+}
+
+.react-calendar__tile:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Today's date tile */
+.react-calendar__tile--now {
+  background: rgba(74, 222, 128, 0.15); /* light green background */
+  color: #4ade80; /* green-400 */
+}
+.react-calendar__tile--now:hover {
+  background: rgba(74, 222, 128, 0.25);
+}
+
+/* Active/Selected day (not used by us, but good to have) */
+.react-calendar__tile--active {
+  background: #06b6d4; /* primary cyan */
+  color: white;
+}
+
+/* Style for the highlighted study days */
+.study-day {
+  background-color: #0891b2 !important; /* A darker, solid cyan */
+  border-radius: 50% !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+/* Style for a day that is BOTH today AND a study day */
+.study-day.react-calendar__tile--now {
+    background: #06b6d4 !important; /* Brighter cyan */
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.7);
+}
+
+/* Tiles for days outside the current month */
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #4b5563; /* gray-600 */
+}

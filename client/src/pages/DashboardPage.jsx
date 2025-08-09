@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import LogForm from '../components/LogForm';
 import LogList from '../components/LogList';
+import StudyCalendar from '../components/StudyCalendar';
+import StreakCard from '../components/StreakCard'; // <-- IMPORT THE NEW STREAK CARD
 import api from '../utils/api';
-import { Book, Clock, Target, CheckSquare } from 'lucide-react';
+import { Clock, Target, CheckSquare } from 'lucide-react';
 
-// Chhota card component stats ke liye
+// StatCard component for other stats
 const StatCard = ({ icon, title, value, color }) => (
-    <div className="card bg-base-200 shadow-md">
+    <div className="card bg-base-200 shadow-md h-full">
         <div className="card-body flex-row items-center gap-4">
             <div className={`p-3 rounded-full ${color}`}>
                 {icon}
@@ -20,11 +22,10 @@ const StatCard = ({ icon, title, value, color }) => (
     </div>
 );
 
-// Goal progress bar ke liye component
+// GoalProgress component
 const GoalProgress = ({ goal }) => {
     const completed = goal.completedTopics.length;
-    // totalTopics agar 0 hai to progress 0 hi rahegi
-    const total = goal.totalTopics > 0 ? goal.totalTopics : completed > 0 ? completed : 1; // Avoid division by zero
+    const total = goal.totalTopics > 0 ? goal.totalTopics : completed > 0 ? completed : 1;
     const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
 
     return (
@@ -47,23 +48,24 @@ const DashboardPage = () => {
   const { user } = useContext(AuthContext);
   const [logs, setLogs] = useState([]);
   const [goals, setGoals] = useState([]);
-  // checklists ke liye state add karein
   const [checklists, setChecklists] = useState([]);
+  const [streak, setStreak] = useState(0);
   const [loading, setLoading] = useState(true);
   const [editingLog, setEditingLog] = useState(null);
 
-  // Sab data ek saath fetch karein
   const fetchData = async () => {
     setLoading(true);
     try {
-        const [logsRes, goalsRes, checklistsRes] = await Promise.all([
+        const [logsRes, goalsRes, checklistsRes, streakRes] = await Promise.all([
             api.get('/logs'),
             api.get('/goals'),
-            api.get('/checklists')
+            api.get('/checklists'),
+            api.get('/auth/streak')
         ]);
         setLogs(logsRes.data);
         setGoals(goalsRes.data);
         setChecklists(checklistsRes.data);
+        setStreak(streakRes.data.streak);
     } catch (err) {
         console.error('Error fetching dashboard data:', err);
     } finally {
@@ -74,15 +76,14 @@ const DashboardPage = () => {
   useEffect(() => { 
     fetchData(); 
   }, []);
-
-  // Handler functions
+  
   const handleEdit = (log) => { setEditingLog(log); window.scrollTo(0, 0); };
   const handleUpdate = () => { setEditingLog(null); fetchData(); };
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this log?')) {
         try {
             await api.delete(`/logs/${id}`);
-            fetchData(); // Refresh all data
+            fetchData();
             alert('Log deleted successfully.');
         } catch (err) {
             console.error('Error deleting log', err);
@@ -91,12 +92,10 @@ const DashboardPage = () => {
     }
   };
   
-  // Stats calculate karein
   const totalHours = logs.reduce((acc, log) => 
     acc + log.subjects.reduce((subAcc, subject) => subAcc + (subject.hours || 0), 0), 0
   );
   const totalTopicsCompleted = goals.reduce((acc, goal) => acc + goal.completedTopics.length, 0);
-  const totalChecklists = checklists.length;
 
   if (loading) { 
     return (
@@ -112,18 +111,21 @@ const DashboardPage = () => {
         Welcome back, {user?.name}!
       </h1>
       
-      {/* --- Stats Cards Section --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* --- Stats Section with Enhanced Streak Card --- */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-2"> {/* Make streak card take more space */}
+            <StreakCard streak={streak} />
+        </div>
         <StatCard icon={<Clock size={24} className="text-white"/>} title="Total Hours Studied" value={totalHours.toFixed(1)} color="bg-blue-500" />
         <StatCard icon={<Target size={24} className="text-white"/>} title="Topics Completed" value={totalTopicsCompleted} color="bg-green-500" />
-        <StatCard icon={<CheckSquare size={24} className="text-white"/>} title="Company Checklists" value={totalChecklists} color="bg-purple-500" />
       </div>
 
       {/* --- Main Grid Layout --- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Left Column: Goals and Checklists */}
+        {/* Left Column: Calendar and Goals */}
         <div className="lg:col-span-1 space-y-8">
+            <StudyCalendar logs={logs} />
             <div className="card bg-base-100 shadow-xl">
                 <div className="card-body">
                     <h2 className="card-title">Goal Progress</h2>
