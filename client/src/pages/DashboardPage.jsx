@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import { AuthContext } from '../contexts/AuthContext';
 import LogForm from '../components/LogForm';
 import LogList from '../components/LogList';
 import StudyCalendar from '../components/StudyCalendar';
-import StreakCard from '../components/StreakCard'; // <-- IMPORT THE NEW STREAK CARD
+import StreakCard from '../components/StreakCard';
+import { PrintableLogListClass } from '../components/PrintableLogListClass'; // Using the stable class component
 import api from '../utils/api';
-import { Clock, Target, CheckSquare } from 'lucide-react';
+import { Clock, Target, CheckSquare, Download } from 'lucide-react';
 
-// StatCard component for other stats
+// Reusable component for summary statistics
 const StatCard = ({ icon, title, value, color }) => (
     <div className="card bg-base-200 shadow-md h-full">
         <div className="card-body flex-row items-center gap-4">
@@ -22,12 +24,11 @@ const StatCard = ({ icon, title, value, color }) => (
     </div>
 );
 
-// GoalProgress component
+// Reusable component for displaying goal progress
 const GoalProgress = ({ goal }) => {
     const completed = goal.completedTopics.length;
     const total = goal.totalTopics > 0 ? goal.totalTopics : completed > 0 ? completed : 1;
     const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-
     return (
         <div className="bg-base-200 p-4 rounded-lg">
             <div className="flex justify-between items-center mb-1">
@@ -48,23 +49,30 @@ const DashboardPage = () => {
   const { user } = useContext(AuthContext);
   const [logs, setLogs] = useState([]);
   const [goals, setGoals] = useState([]);
-  const [checklists, setChecklists] = useState([]);
   const [streak, setStreak] = useState(0);
   const [loading, setLoading] = useState(true);
   const [editingLog, setEditingLog] = useState(null);
 
+  // Ref for the hidden, printable component
+  const printableRef = useRef(null);
+
+  // Hook for handling the print action
+  const handlePrint = useReactToPrint({
+    content: () => printableRef.current,
+    documentTitle: `PrepStack-Study-Logs-${user?.name}`,
+  });
+
+  // Fetches all necessary data for the dashboard in one go
   const fetchData = async () => {
     setLoading(true);
     try {
-        const [logsRes, goalsRes, checklistsRes, streakRes] = await Promise.all([
+        const [logsRes, goalsRes, streakRes] = await Promise.all([
             api.get('/logs'),
             api.get('/goals'),
-            api.get('/checklists'),
             api.get('/auth/streak')
         ]);
         setLogs(logsRes.data);
         setGoals(goalsRes.data);
-        setChecklists(checklistsRes.data);
         setStreak(streakRes.data.streak);
     } catch (err) {
         console.error('Error fetching dashboard data:', err);
@@ -77,6 +85,7 @@ const DashboardPage = () => {
     fetchData(); 
   }, []);
   
+  // Handlers for log actions
   const handleEdit = (log) => { setEditingLog(log); window.scrollTo(0, 0); };
   const handleUpdate = () => { setEditingLog(null); fetchData(); };
   const handleDelete = async (id) => {
@@ -92,6 +101,7 @@ const DashboardPage = () => {
     }
   };
   
+  // Calculate stats from the fetched data
   const totalHours = logs.reduce((acc, log) => 
     acc + log.subjects.reduce((subAcc, subject) => subAcc + (subject.hours || 0), 0), 0
   );
@@ -107,53 +117,68 @@ const DashboardPage = () => {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-4xl font-bold">
-        Welcome back, {user?.name}!
-      </h1>
-      
-      {/* --- Stats Section with Enhanced Streak Card --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-2"> {/* Make streak card take more space */}
-            <StreakCard streak={streak} />
+        {/* Header Section with Export Button */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <h1 className="text-4xl font-bold">
+                Welcome back, {user?.name}!
+            </h1>
+            <button 
+                onClick={handlePrint} 
+                className="btn btn-outline btn-primary gap-2"
+                disabled={logs.length === 0} // Button is disabled if there are no logs
+            >
+                <Download size={16} />
+                Export Logs to PDF
+            </button>
         </div>
-        <StatCard icon={<Clock size={24} className="text-white"/>} title="Total Hours Studied" value={totalHours.toFixed(1)} color="bg-blue-500" />
-        <StatCard icon={<Target size={24} className="text-white"/>} title="Topics Completed" value={totalTopicsCompleted} color="bg-green-500" />
-      </div>
+      
+        {/* Top Stats Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-2">
+                <StreakCard streak={streak} />
+            </div>
+            <StatCard icon={<Clock size={24} className="text-white"/>} title="Total Hours Studied" value={totalHours.toFixed(1)} color="bg-blue-500" />
+            <StatCard icon={<Target size={24} className="text-white"/>} title="Topics Completed" value={totalTopicsCompleted} color="bg-green-500" />
+        </div>
 
-      {/* --- Main Grid Layout --- */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Left Column: Calendar and Goals */}
-        <div className="lg:col-span-1 space-y-8">
-            <StudyCalendar logs={logs} />
-            <div className="card bg-base-100 shadow-xl">
-                <div className="card-body">
-                    <h2 className="card-title">Goal Progress</h2>
-                    <div className="space-y-4">
-                        {goals.length > 0 ? (
-                            goals.map(goal => <GoalProgress key={goal._id} goal={goal} />)
-                        ) : (
-                            <p>No goals set yet.</p>
-                        )}
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column */}
+            <div className="lg:col-span-1 space-y-8">
+                <StudyCalendar logs={logs} />
+                <div className="card bg-base-100 shadow-xl">
+                    <div className="card-body">
+                        <h2 className="card-title">Goal Progress</h2>
+                        <div className="space-y-4">
+                            {goals.length > 0 ? (
+                                goals.map(goal => <GoalProgress key={goal._id} goal={goal} />)
+                            ) : (
+                                <p>No goals set yet.</p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {/* Right Column: Log Form and Log List */}
-        <div className="lg:col-span-2 space-y-8">
-            <LogForm 
-                onLogAdded={fetchData} 
-                editingLog={editingLog} 
-                onLogUpdated={handleUpdate} 
-            />
-            <LogList 
-                logs={logs} 
-                onDelete={handleDelete} 
-                onEdit={handleEdit} 
-            />
+            {/* Right Column */}
+            <div className="lg:col-span-2 space-y-8">
+                <LogForm 
+                    onLogAdded={fetchData} 
+                    editingLog={editingLog} 
+                    onLogUpdated={handleUpdate} 
+                />
+                <LogList 
+                    logs={logs} 
+                    onDelete={handleDelete} 
+                    onEdit={handleEdit} 
+                />
+            </div>
         </div>
-      </div>
+      
+        {/* Hidden component for printing */}
+        <div className="hidden">
+            <PrintableLogListClass ref={printableRef} logs={logs} user={user} />
+        </div>
     </div>
   );
 };
