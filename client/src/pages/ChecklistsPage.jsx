@@ -26,6 +26,13 @@ const ChecklistsPage = () => {
     e.preventDefault();
     if (!company.trim()) return;
 
+    // Check if a checklist for this company already exists
+    const existing = checklists.find(c => c.company.toLowerCase() === company.trim().toLowerCase());
+    if (existing) {
+        alert(`A checklist for ${company} already exists!`);
+        return;
+    }
+
     const newChecklist = {
       company,
       items: [
@@ -41,8 +48,19 @@ const ChecklistsPage = () => {
       setCompany('');
       fetchChecklists();
     } catch (err) {
-      console.error('Failed to create checklist', err);
       alert('Failed to create checklist.');
+    }
+  };
+  
+  // Function to delete a checklist
+  const handleDeleteChecklist = async (id) => {
+    if (window.confirm('Are you sure you want to delete this entire checklist?')) {
+        try {
+            await api.delete(`/checklists/${id}`);
+            fetchChecklists(); // Refresh the list after deleting
+        } catch (err) {
+            alert('Failed to delete checklist.');
+        }
     }
   };
 
@@ -59,7 +77,7 @@ const ChecklistsPage = () => {
             <div className="join">
               <input
                 type="text"
-                placeholder="Enter Company Name"
+                placeholder="Enter Company Name (e.g., Google)"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 className="input input-bordered join-item w-full"
@@ -74,9 +92,14 @@ const ChecklistsPage = () => {
       </div>
 
       {checklists.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {checklists.map(checklist => (
-            <ChecklistCard key={checklist._id} checklist={checklist} onUpdate={fetchChecklists} />
+            <ChecklistCard 
+                key={checklist._id} 
+                checklist={checklist} 
+                onUpdate={fetchChecklists}
+                onDelete={handleDeleteChecklist} // Pass the delete handler
+            />
           ))}
         </div>
       ) : (
