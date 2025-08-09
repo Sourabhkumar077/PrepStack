@@ -1,26 +1,86 @@
 import React, { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { AuthContext } from '../contexts/AuthContext';
+import { 
+  CheckSquare, 
+  LogOut,
+  UserCircle
+} from 'lucide-react';
 
 const Navbar = () => {
-    const { logout } = useContext(AuthContext);
-    const linkStyles = "text-lg font-semibold text-gray-700 hover:text-blue-600";
-    const activeLinkStyles = { color: '#2563EB' };
+  const { user, logout } = useContext(AuthContext);
 
-    return (
-        <nav className="bg-white shadow-md p-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-blue-600">PrepStack</h1>
-            <div className="flex gap-8">
-                <NavLink to="/dashboard" style={({ isActive }) => isActive ? activeLinkStyles : undefined} className={linkStyles}>Dashboard</NavLink>
-                <NavLink to="/goals" style={({ isActive }) => isActive ? activeLinkStyles : undefined} className={linkStyles}>Goals</NavLink>
-                <NavLink to="/checklists" style={({ isActive }) => isActive ? activeLinkStyles : undefined} className={linkStyles}>Checklists</NavLink>
+  return (
+    <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-cyan-500/20">
+      <nav className="container mx-auto px-4 py-3 flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2">
+          <CheckSquare className="h-8 w-8 text-cyan-400" />
+          <span className="text-2xl font-bold bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent">
+            PrepStack
+          </span>
+        </Link>
 
+        {/* Navigation Links - Show for logged-in users */}
+        {user && (
+          <div className="hidden md:flex items-center gap-6">
+            <NavLink to="/dashboard" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
+              Dashboard
+            </NavLink>
+            <NavLink to="/goals" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
+              Goals
+            </NavLink>
+            <NavLink to="/checklists" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
+              Checklists
+            </NavLink>
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div>
+          {user ? (
+            // User Dropdown for logged-in users
+            <div className="dropdown dropdown-end">
+              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full ring-2 ring-cyan-500/50">
+                   <UserCircle className="text-gray-300" size={40}/>
+                </div>
+              </label>
+              <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-slate-800 border border-cyan-500/20 rounded-box w-52">
+                <li className="p-2">
+                    <span className="font-semibold text-white">{user.name}</span>
+                    <span className="text-xs text-gray-400">{user.email}</span>
+                </li>
+                <li>
+                    <a onClick={logout} className="text-red-400 hover:bg-red-500/20">
+                        <LogOut size={16} />
+                        Logout
+                    </a>
+                </li>
+              </ul>
             </div>
-            <button onClick={logout} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
-                Logout
-            </button>
-        </nav>
-    );
+          ) : (
+            // Buttons for logged-out users
+            <div className="flex items-center gap-4">
+              <Link to="/login" className="text-gray-300 font-semibold hover:text-white transition-colors">
+                Sign In
+              </Link>
+              <Link to="/login">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-5 py-2 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg text-white font-semibold shadow-lg hover:shadow-cyan-500/25 transition-shadow"
+                >
+                  Get Started
+                </motion.button>
+              </Link>
+            </div>
+          )}
+        </div>
+      </nav>
+    </header>
+  );
 };
 
 export default Navbar;

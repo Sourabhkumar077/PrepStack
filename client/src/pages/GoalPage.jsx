@@ -21,13 +21,16 @@ const GoalsPage = () => {
     fetchGoals();
   }, []);
 
-  if (loading) return <p>Loading goals...</p>;
+  if (loading) return <p className="text-center mt-8">Loading goals...</p>;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-      {goals.map(goal => (
-        <GoalTracker key={goal._id} goal={goal} onGoalUpdated={fetchGoals} />
-      ))}
+    <div className="space-y-8">
+      <h1 className="text-4xl font-bold">Subject Goals</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {goals.map(goal => (
+          <GoalTracker key={goal._id} goal={goal} onGoalUpdated={fetchGoals} />
+        ))}
+      </div>
     </div>
   );
 };
