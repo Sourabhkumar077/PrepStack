@@ -7,6 +7,7 @@ import DashboardPage from './pages/DashboardPage';
 import GoalsPage from './pages/GoalPage'; 
 import ChecklistsPage from './pages/ChecklistsPage';
 import LandingPage from './pages/LandingPage';
+import DSAPage from './pages/DSAPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/goals" element={<GoalsPage />} />
         <Route path="/checklists" element={<ChecklistsPage />} />
+        <Route path="/dsa-prep" element={<DSAPage />} />
       </Route>
     </Routes>
   );

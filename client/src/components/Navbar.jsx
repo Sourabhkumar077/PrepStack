@@ -62,6 +62,9 @@ const Navbar = () => {
             <NavLink to="/dashboard" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
               Dashboard
             </NavLink>
+             <NavLink to="/dsa-prep" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
+              DSA Prep
+            </NavLink>
             <NavLink to="/goals" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
               Goals
             </NavLink>
