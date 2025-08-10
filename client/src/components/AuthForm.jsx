@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight, Sparkles } from 'lucide-react';
+import api from '../utils/api';
 
 const AuthForm = () => {
   const [name, setName] = useState('');
@@ -13,7 +14,7 @@ const AuthForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -21,39 +22,32 @@ const AuthForm = () => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
-    if (isLogin) {
-      try {
-        const res = await axios.post('/api/auth/login', { email, password });
-        if (await login(res.data.token)) {
-          navigate('/app/dashboard'); 
-        } else {
-          setError('Login failed. Please check your credentials.');
-        }
-      } catch (err) {
-        setError('Invalid credentials. Please try again.');
+
+    try {
+      const endpoint = isLogin ? '/auth/login' : '/auth/register';
+      const payload = isLogin ? { email, password } : { name, email, password };
+
+      const res = await api.post(endpoint, payload);
+
+      if (await login(res.data.token)) {
+        navigate('/app/dashboard');
+      } else {
+        setError(isLogin ? 'Login failed. Please check your credentials.' : 'Could not log you in after registration.');
       }
-    } else {
-      try {
-        const res = await axios.post('/api/auth/register', { name, email, password });
-        if (await login(res.data.token)) {
-          navigate('/app/dashboard'); // Corrected Path
-        } else {
-          setError('Could not log you in after registration.');
-        }
-      } catch (err) {
-        setError(err.response?.data?.msg || 'Registration failed. Please try again.');
-      }
+    } catch (err) {
+      setError(err.response?.data?.msg || (isLogin ? 'Invalid credentials. Please try again.' : 'Registration failed. Please try again.'));
     }
+
     setIsLoading(false);
   };
 
+
   const formVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.6,
         staggerChildren: 0.1
       }
@@ -98,21 +92,19 @@ const AuthForm = () => {
               }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             />
-            <button 
+            <button
               type="button"
-              onClick={() => setIsLogin(true)} 
-              className={`relative z-10 w-1/2 py-3 px-4 rounded-xl font-semibold text-sm transition-colors duration-200 ${
-                isLogin ? 'text-white' : 'text-gray-400 hover:text-gray-200'
-              }`}
+              onClick={() => setIsLogin(true)}
+              className={`relative z-10 w-1/2 py-3 px-4 rounded-xl font-semibold text-sm transition-colors duration-200 ${isLogin ? 'text-white' : 'text-gray-400 hover:text-gray-200'
+                }`}
             >
               Sign In
             </button>
-            <button 
+            <button
               type="button"
-              onClick={() => setIsLogin(false)} 
-              className={`relative z-10 w-1/2 py-3 px-4 rounded-xl font-semibold text-sm transition-colors duration-200 ${
-                !isLogin ? 'text-white' : 'text-gray-400 hover:text-gray-200'
-              }`}
+              onClick={() => setIsLogin(false)}
+              className={`relative z-10 w-1/2 py-3 px-4 rounded-xl font-semibold text-sm transition-colors duration-200 ${!isLogin ? 'text-white' : 'text-gray-400 hover:text-gray-200'
+                }`}
             >
               Sign Up
             </button>
@@ -149,13 +141,13 @@ const AuthForm = () => {
                 </label>
                 <div className="relative group">
                   <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-cyan-400 transition-colors duration-200" size={20} />
-                  <input 
-                    type="text" 
-                    placeholder="Enter your full name" 
+                  <input
+                    type="text"
+                    placeholder="Enter your full name"
                     className="w-full pl-12 pr-4 py-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:outline-none transition-all duration-200 hover:border-white/20"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    required 
+                    required
                   />
                 </div>
               </motion.div>
@@ -168,9 +160,9 @@ const AuthForm = () => {
             </label>
             <div className="relative group">
               <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-cyan-400 transition-colors duration-200" size={20} />
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
+              <input
+                type="email"
+                placeholder="Enter your email"
                 className="w-full pl-12 pr-4 py-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:outline-none transition-all duration-200 hover:border-white/20"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -185,9 +177,9 @@ const AuthForm = () => {
             </label>
             <div className="relative group">
               <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-cyan-400 transition-colors duration-200" size={20} />
-              <input 
+              <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Enter your password" 
+                placeholder="Enter your password"
                 className="w-full pl-12 pr-12 py-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 focus:outline-none transition-all duration-200 hover:border-white/20"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -202,10 +194,10 @@ const AuthForm = () => {
               </button>
             </div>
           </motion.div>
-          
+
           <motion.div variants={itemVariants} className="pt-2">
-            <motion.button 
-              type="submit" 
+            <motion.button
+              type="submit"
               disabled={isLoading}
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
