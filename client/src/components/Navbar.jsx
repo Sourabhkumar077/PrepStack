@@ -57,16 +57,16 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-6">
           {user && (
             <>
-              <NavLink to="/dashboard" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
+              <NavLink to="/app/dashboard" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
                 Dashboard
               </NavLink>
-              <NavLink to="/dsa-prep" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
+              <NavLink to="/app/dsa-prep" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
                 DSA Prep
               </NavLink>
-              <NavLink to="/goals" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
+              <NavLink to="/app/goals" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
                 Goals
               </NavLink>
-              <NavLink to="/checklists" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
+              <NavLink to="/app/checklists" className={({ isActive }) => `font-semibold transition-colors ${isActive ? 'text-cyan-400' : 'text-gray-300 hover:text-white'}`}>
                 Checklists
               </NavLink>
             </>
@@ -120,10 +120,10 @@ const Navbar = () => {
           <ul className="flex flex-col items-center gap-4">
             {user ? (
                 <>
-                    <li><NavLink to="/dashboard" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `font-semibold text-lg ${isActive ? 'text-cyan-400' : 'text-gray-300'}`}>Dashboard</NavLink></li>
-                    <li><NavLink to="/dsa-prep" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `font-semibold text-lg ${isActive ? 'text-cyan-400' : 'text-gray-300'}`}>DSA Prep</NavLink></li>
-                    <li><NavLink to="/goals" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `font-semibold text-lg ${isActive ? 'text-cyan-400' : 'text-gray-300'}`}>Goals</NavLink></li>
-                    <li><NavLink to="/checklists" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `font-semibold text-lg ${isActive ? 'text-cyan-400' : 'text-gray-300'}`}>Checklists</NavLink></li>
+                    <li><NavLink to="/app/dashboard" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `font-semibold text-lg ${isActive ? 'text-cyan-400' : 'text-gray-300'}`}>Dashboard</NavLink></li>
+                    <li><NavLink to="/app/dsa-prep" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `font-semibold text-lg ${isActive ? 'text-cyan-400' : 'text-gray-300'}`}>DSA Prep</NavLink></li>
+                    <li><NavLink to="/app/goals" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `font-semibold text-lg ${isActive ? 'text-cyan-400' : 'text-gray-300'}`}>Goals</NavLink></li>
+                    <li><NavLink to="/app/checklists" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `font-semibold text-lg ${isActive ? 'text-cyan-400' : 'text-gray-300'}`}>Checklists</NavLink></li>
                     <li><a onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="text-red-400 font-semibold text-lg">Logout</a></li>
                 </>
             ) : (

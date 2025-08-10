@@ -26,7 +26,7 @@ const AuthForm = () => {
       try {
         const res = await axios.post('/api/auth/login', { email, password });
         if (await login(res.data.token)) {
-          navigate('/dashboard'); 
+          navigate('/app/dashboard'); 
         } else {
           setError('Login failed. Please check your credentials.');
         }
@@ -37,7 +37,7 @@ const AuthForm = () => {
       try {
         const res = await axios.post('/api/auth/register', { name, email, password });
         if (await login(res.data.token)) {
-          navigate('/dashboard'); // Corrected Path
+          navigate('/app/dashboard'); // Corrected Path
         } else {
           setError('Could not log you in after registration.');
         }
