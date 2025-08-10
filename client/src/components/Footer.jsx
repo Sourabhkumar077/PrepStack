@@ -1,13 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Github, Linkedin, Twitter, CheckSquare } from 'lucide-react'; // Social icons import karein
+import { Github, Linkedin, Twitter, CheckSquare ,Heart } from 'lucide-react'; // Social icons import karein
 
 const Footer = () => {
   return (
     <footer className="bg-slate-900 border-t border-cyan-500/20 relative overflow-hidden mt-16">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
-      
+
       <div className="container mx-auto px-4 py-12">
         <div className="text-center">
           {/* Logo */}
@@ -19,38 +19,47 @@ const Footer = () => {
           </div>
 
           {/* Tagline */}
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, delay: 0.1 }} 
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
             className="text-gray-400 mb-8 max-w-2xl mx-auto"
           >
             Empowering students to achieve their placement dreams through comprehensive, structured preparation.
           </motion.p>
-          
+
           {/* Social Media Links */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex justify-center gap-6 mb-8"
           >
-            <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+            <a href="https://github.com/Sourabhkumar077" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
               <Github size={24} />
             </a>
-            <a href="https://linkedin.com/in/your-username" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+            <a href="https://www.linkedin.com/in/sourabh-kumar-mahuvar-b62404253/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
               <Linkedin size={24} />
             </a>
-            <a href="https://twitter.com/your-username" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+            <a href="https://x.com/SourabhKumar077?t=W44K3SGVUkWnI2vCE88UrQ&s=08" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
               <Twitter size={24} />
             </a>
           </motion.div>
-          
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex justify-center items-center gap-2 text-gray-400 mb-4"
+          >
+            Developed with <Heart size={16} className="text-red-500" /> by Sourabh kumar
+          </motion.div>
+
           {/* Copyright Text */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, delay: 0.3 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
             className="text-gray-500 text-sm"
           >
             © {new Date().getFullYear()} PrepStack. All rights reserved.
