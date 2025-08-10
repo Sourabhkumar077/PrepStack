@@ -46,7 +46,7 @@ const Navbar = () => {
     <header className={navbarClasses}>
       <nav className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
+        <Link to="/app/dashboard" className="flex items-center gap-2">
           <CheckSquare className="h-8 w-8 text-cyan-400" />
           <span className="text-2xl font-bold bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent">
             PrepStack

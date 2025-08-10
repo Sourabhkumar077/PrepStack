@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// this will use backend url when the frontend is live
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_URL,
 });
 
 /*

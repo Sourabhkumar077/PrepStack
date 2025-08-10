@@ -1,12 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 // Load environment variables from .env file
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+app.use(cors({
+    origin: process.env.CLIENT_URL
+}));
 
 // This middleware is needed to parse JSON bodies from requests
 app.use(express.json());
