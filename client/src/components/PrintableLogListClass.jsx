@@ -45,3 +45,5 @@ export class PrintableLogListClass extends React.PureComponent {
     );
   }
 }
+
+export default PrintableLogListClass;

@@ -6,6 +6,11 @@ import ProtectedRoute from "./ProtectedRoute";
 import GoalTracker from "./GoalTracker";
 import ChecklistCard from "./ChecklistCard";
 import Footer from "./Footer";
+import LogForm from "./LogForm";
+import PrintableLogListClass from "./PrintableLogListClass";
+import StudyChart from "./StudyChart";
+import StreakCard from "./StreakCard";
+import StudyCalendar from "./StudyCalendar";
 
 
 export {
@@ -16,6 +21,11 @@ export {
     ProtectedRoute,
     GoalTracker,
     ChecklistCard,
-    Footer
+    Footer,
+    StudyChart,
+    LogForm,
+    PrintableLogListClass,
+    StreakCard,
+    StudyCalendar
 
 };

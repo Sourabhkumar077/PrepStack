@@ -26,7 +26,7 @@ const AuthForm = () => {
       try {
         const res = await axios.post('/api/auth/login', { email, password });
         if (await login(res.data.token)) {
-          navigate('/dashboard'); // Corrected Path
+          navigate('/dashboard'); 
         } else {
           setError('Login failed. Please check your credentials.');
         }
