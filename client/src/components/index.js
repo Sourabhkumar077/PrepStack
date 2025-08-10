@@ -5,6 +5,8 @@ import Layout from "./Layout";
 import ProtectedRoute from "./ProtectedRoute";
 import GoalTracker from "./GoalTracker";
 import ChecklistCard from "./ChecklistCard";
+import Footer from "./Footer";
+
 
 export {
     AuthForm,
@@ -13,5 +15,7 @@ export {
     Layout,
     ProtectedRoute,
     GoalTracker,
-    ChecklistCard
+    ChecklistCard,
+    Footer
+
 };

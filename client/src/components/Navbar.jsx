@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AuthContext } from '../contexts/AuthContext';
 import { 
@@ -10,9 +10,43 @@ import {
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  
+  // State to track if the user has scrolled
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Set state to true if user has scrolled more than 10px, else false
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    // Add scroll event listener when the component mounts
+    window.addEventListener('scroll', handleScroll);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  // Conditionally set the navbar style based on scroll state
+  const navbarClasses = `
+    sticky top-0 z-50 transition-all duration-300
+    ${isScrolled ? 'bg-slate-900/80 backdrop-blur-md border-b border-cyan-500/20' : 'bg-transparent border-b border-transparent'}
+  `;
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-cyan-500/20">
+    <header className={navbarClasses}>
       <nav className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
@@ -53,7 +87,7 @@ const Navbar = () => {
                     <span className="text-xs text-gray-400">{user.email}</span>
                 </li>
                 <li>
-                    <a onClick={logout} className="text-red-400 hover:bg-red-500/20">
+                    <a onClick={handleLogout} className="text-red-400 hover:bg-red-500/20">
                         <LogOut size={16} />
                         Logout
                     </a>
