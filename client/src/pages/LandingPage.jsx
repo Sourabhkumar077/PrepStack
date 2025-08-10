@@ -14,7 +14,11 @@ import {
   Target,
   Clock,
   BookOpen,
-  Users
+  Users,
+  LayoutDashboard,
+  ClipboardList,
+  CalendarCheck,
+  FileText
 } from 'lucide-react';
 
 // Animation variants for reusability
@@ -147,6 +151,8 @@ const ProblemSection = () => {
   );
 };
 
+
+
 const ComparisonSection = () => {
   const features = [
     { feature: "DSA + Aptitude + SQL in one", prepstack: true, others: false },
@@ -237,62 +243,117 @@ const CTASection = () => {
   );
 };
 
-// const Footer = () => {
-//     return (
-//       <footer className="bg-slate-900 border-t border-cyan-500/20 relative overflow-hidden">
-//         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
-
-//         <div className="container mx-auto px-4 py-12">
-//           <div className="text-center">
-//             <motion.h3 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-//               PrepStack
-//             </motion.h3>
-//             <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-gray-400 mb-8 max-w-2xl mx-auto">
-//               Empowering students to achieve their placement dreams through comprehensive, structured preparation.
-//             </motion.p>
-
-//             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-gray-500 text-sm">
-//               © {new Date().getFullYear()} PrepStack. All rights reserved.
-//             </motion.div>
-//           </div>
-//         </div>
-//       </footer>
-//     );
-// };
-
-// Main LandingPage Component with redirect logic
-const LandingPage = () => {
-  const { user, loading } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // If the user is logged in and the auth check is complete, redirect to the dashboard
-    if (!loading && user) {
-      navigate('/dashboard');
+const SolutionsSection = () => {
+  const solutions = [
+    {
+      icon: <LayoutDashboard className="text-cyan-400" size={24} />,
+      title: "Centralized Dashboard",
+      description: "No more scattered notes. Manage your logs, goals, and resources all in one place."
+    },
+    {
+      icon: <ClipboardList className="text-green-400" size={24} />,
+      title: "Structured Checklists",
+      description: "Follow curated DSA sheets and company-specific checklists for a clear path to success."
+    },
+    {
+      icon: <CalendarCheck className="text-orange-400" size={24} />,
+      title: "Consistent Tracking",
+      description: "Log your daily progress and build a study streak with our calendar and tracker."
+    },
+    {
+      icon: <FileText className="text-purple-400" size={24} />,
+      title: "Resource Management",
+      description: "Save important links, notes, and articles directly within your subject goals."
     }
-  }, [user, loading, navigate]);
-
-  // While the auth status is being checked, or if the user is logged in and about to be redirected,
-  // show a loading spinner to prevent the landing page from flashing.
-  if (loading || user) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-slate-900">
-        <div className="w-8 h-8 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  // If the user is not logged in, show the full landing page.
+  ];
   return (
-    <div className="min-h-screen bg-slate-900 font-sans">
-      <Navbar />
-      <HeroSection />
-      <ProblemSection />
-      <ComparisonSection />
-      <CTASection />
-      <Footer />
-    </div>
+    <section className="py-24 bg-slate-800">
+      <motion.div 
+        initial="initial" 
+        whileInView="animate" 
+        viewport={{ once: true, margin: "-100px" }} 
+        variants={staggerContainer} 
+        className="container mx-auto px-4"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {solutions.map((solution, index) => (
+            <motion.div 
+              key={index} 
+              variants={staggerItem}
+              className="card bg-base-100 shadow-lg border border-white/10"
+            >
+              <div className="card-body items-center text-center">
+                <div className="p-4 bg-slate-700 rounded-full mb-4">
+                  {solution.icon}
+                </div>
+                <h2 className="card-title text-xl text-white">{solution.title}</h2>
+                <p className="text-gray-400">{solution.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </section>
   );
 };
+
+  // const Footer = () => {
+  //     return (
+  //       <footer className="bg-slate-900 border-t border-cyan-500/20 relative overflow-hidden">
+  //         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
+
+  //         <div className="container mx-auto px-4 py-12">
+  //           <div className="text-center">
+  //             <motion.h3 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+  //               PrepStack
+  //             </motion.h3>
+  //             <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-gray-400 mb-8 max-w-2xl mx-auto">
+  //               Empowering students to achieve their placement dreams through comprehensive, structured preparation.
+  //             </motion.p>
+
+  //             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-gray-500 text-sm">
+  //               © {new Date().getFullYear()} PrepStack. All rights reserved.
+  //             </motion.div>
+  //           </div>
+  //         </div>
+  //       </footer>
+  //     );
+  // };
+
+  // Main LandingPage Component with redirect logic
+  const LandingPage = () => {
+    const { user, loading } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      // If the user is logged in and the auth check is complete, redirect to the dashboard
+      if (!loading && user) {
+        navigate('/dashboard');
+      }
+    }, [user, loading, navigate]);
+
+    // While the auth status is being checked, or if the user is logged in and about to be redirected,
+    // show a loading spinner to prevent the landing page from flashing.
+    if (loading || user) {
+      return (
+        <div className="flex h-screen items-center justify-center bg-slate-900">
+          <div className="w-8 h-8 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      );
+    }
+
+    // If the user is not logged in, show the full landing page.
+    return (
+      <div className="min-h-screen bg-slate-900 font-sans">
+        <Navbar />
+        <HeroSection />
+        <ProblemSection />
+        <SolutionsSection />
+        <ComparisonSection />
+        <CTASection />
+        <Footer />
+      </div>
+    );
+  };
 
 export default LandingPage;
