@@ -34,6 +34,11 @@ const connectDB = async () => {
   }
 };
 connectDB();
+
+app.get('/', (req, res) => {
+  res.send('PrepStack API is running...');
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
