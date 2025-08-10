@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middlewares/auth');
-const { register, login, getMe } = require('../controllers/authController');
+const { register, login, getMe,getUserStreak } = require('../controllers/authController');
 
 // @route   POST api/auth/register
 // @desc    Register a new user
@@ -14,5 +14,10 @@ router.post('/register', register);
 router.post('/login', login);
 
 router.get('/me', auth, getMe);
+
+// @route   GET api/auth/streak
+// @desc    Get user's current study streak
+// @access  Private
+router.get('/streak', auth, getUserStreak);
 
 module.exports = router;

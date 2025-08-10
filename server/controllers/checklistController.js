@@ -44,3 +44,26 @@ exports.updateChecklist = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
+// @desc    Delete a checklist
+exports.deleteChecklist = async (req, res) => {
+  try {
+    const checklist = await Checklist.findById(req.params.id);
+
+    if (!checklist) {
+      return res.status(404).json({ msg: 'Checklist not found' });
+    }
+
+    // Make sure user owns checklist
+    if (checklist.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'Not authorized' });
+    }
+
+    await Checklist.findByIdAndDelete(req.params.id);
+
+    res.json({ msg: 'Checklist removed' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};

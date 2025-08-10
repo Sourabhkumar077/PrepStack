@@ -67,7 +67,7 @@ const LogForm = ({ onLogAdded, editingLog, onLogUpdated }) => {
             <h3 className="card-title text-2xl">{isEditing ? 'Edit Study Log' : 'Add a New Study Log'}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="form-control">
-                <label className="label"><span className="label-text">Date</span></label>
+                <label className="label"><span className="label-text">Date</span></label> <br />
                 <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="input input-bordered" required />
               </div>
               <div className="form-control">
