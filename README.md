@@ -1,12 +1,12 @@
 <div align="center">
-  <img src="./client/public/Logo.png" alt="PrepStack Logo" width="400"/>
+  <img src="./client/public/Logo.png" alt="PrepStack Logo" width="300"/>
   <br/>
   <h1 align="center">PrepStack - Personal Placement Tracker</h1>
   <p align="center">
     An all-in-one dashboard to help students streamline preparation, track progress, and ace their placements.
     <br />
     <br />
-    <a href="https://prep-stack-eta.vercel.app/" target="_blank"><strong>Visit the Live Application »</strong></a>
+    <a href="https://prep-stack-eta.vercel.app/" target="_blank"><strong>View Live »</strong></a>
   </p>
 </div>
 
@@ -47,6 +47,6 @@ It's a full-stack MERN application that serves as a single source of truth for y
 
 <p align="center">
   <a href="https://prep-stack-eta.vercel.app/" target="_blank">
-    <img src"./client/public/ScreenShot.png" alt="Live Demo Screenshot" width="800"/>
+    <img src ="./client/public/ScreenShot.png" alt="Live Demo Screenshot" width="800"/>
   </a>
 </p>
