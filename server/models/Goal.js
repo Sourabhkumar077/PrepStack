@@ -5,6 +5,7 @@ const GoalSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
+    index: true
   },
   subject: {
     type: String, // e.g., "DSA", "Aptitude"

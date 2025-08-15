@@ -5,6 +5,7 @@ const LogSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
+    index: true
   },
   date: {
     type: String, // 'YYYY-MM-DD'

@@ -328,7 +328,7 @@ const SolutionsSection = () => {
     useEffect(() => {
       // If the user is logged in and the auth check is complete, redirect to the dashboard
       if (!loading && user) {
-        navigate('/dashboard');
+        navigate('/app/dashboard');
       }
     }, [user, loading, navigate]);
 
